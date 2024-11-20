@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('movieName'); 
             $table->string('path');
-            $table->enum('status', ['uploading', 'completed'])->default('uploading');
+            $table->enum('status', ['pending', 'completed']);
             $table->timestamps();
         });
+        
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\StreamController;
+use App\Http\Controllers\MovieController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,7 +16,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
-// Route::get('/stream/{filename}', [StreamController::class, 'stream'])->name('stream');
 
-
-
+Route::get('/movies/{movie}/edit', [MovieController::class, 'edit'])->name('movies.edit');
+Route::put('/movies/update', [MovieController::class, 'edit'])->name('movies.update');
+Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
