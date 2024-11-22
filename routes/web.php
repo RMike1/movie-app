@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\MovieUploadController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,6 +18,6 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('/movies/{movie}/edit', [MovieController::class, 'edit'])->name('movies.edit');
-Route::put('/movies/update', [MovieController::class, 'edit'])->name('movies.update');
 Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
+
+Route::post('upload/upload-chunk', [MovieUploadController::class, 'uploadLargeFiles'])->name('files.upload.large');
