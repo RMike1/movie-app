@@ -21,7 +21,7 @@ class MovieUploadController extends Controller
         $file->move($tempDir, "{$fileName}.part{$chunkIndex}");
         if ($this->areAllChunksUploaded($fileName, $totalChunks, $tempDir)) {
             $finalPath = $this->assembleChunks($fileName, $totalChunks, $tempDir,$file);
-            // dd($finalPath);
+            // dd($finalPath); 
             return [
                 'path' => asset('storage/' . $finalPath),
                 'filename' => $fileName,
