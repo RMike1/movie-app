@@ -8,7 +8,7 @@
             uploadButton: @entangle('uploadButton'),
             isPaused: @entangle('isPaused'),
             resumable: null,
-            fileInputData:'',
+            successMessageAlert:@entangle('successMessageAlert'),
 
             init() {
                 const self = this;
@@ -30,6 +30,8 @@
 
                 this.resumable.on('fileProgress', function(file) {
                     self.progress = Math.floor(file.progress() * 100);
+                    self.videoPath = false;
+                    self.uploadButton = false;
                 });
 
                 this.resumable.on('fileSuccess', function(file, response) {
@@ -91,24 +93,23 @@
 
         <div class="flex justify-between mt-4">
             <button 
-                x-show="isUploading"
-                x-on:click="cancelUpload()"
-                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
-                Cancel
-            </button>
-
-            <button 
                 x-show="isUploading && !isPaused"
                 @click="pauseUpload"
-                class="bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                class="text-white px-4 py-2 rounded-lg outline outline-offset-2 outline-red-300/50 hover:bg-red-300/50">
                 Pause
             </button>
 
             <button 
                 x-show="isUploading && isPaused"
                 @click="resumeUpload"
-                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                class="text-white px-4 py-2 rounded-lg outline outline-offset-2 outline-green-600/50 hover:bg-green-600/50">
                 Resume
+            </button>
+            <button 
+                x-show="isUploading"
+                x-on:click="cancelUpload()"
+                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                Cancel
             </button>
         </div>
 
@@ -124,5 +125,19 @@
             <span wire:loading.remove wire:target='uploadMovieFile'>Click to Upload</span>
             <span wire:loading wire:target="uploadMovieFile">Uploading...</span>
         </button>
+            
+        <button 
+                x-show="uploadButton"
+                x-on:click="cancelUpload()"
+                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                Cancel
+        </button>
+
+        <div class="text-md text-white pt-2 px-4 py-2" x-init="setTimeout(() => successMessageAlert = false, 2000)" x-show="successMessageAlert" x-transition:enter="transition ease-out duration-300">
+            <span >
+                Uploaded..
+            </span>
+        </div>
+
     </div>
 </div>

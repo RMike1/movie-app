@@ -21,18 +21,22 @@ class Upload extends Component
     public $isPaused = false;
     public $uploadButton = false;
     public $progress = 0;
+    public $successMessageAlert=false;
 
     public function uploadMovieFile()
     {
 
         foreach($this->fileImage as $imageData){
             $filePath = $imageData->store('movies', 'public');
+            Movie::create([
+                'movieName' => $this->movieName,
+                'path' => $filePath,
+            ]);
         }
-        Movie::create([
-            'movieName' => $this->movieName,
-            'path' => $filePath,
-        ]);
         $this->reset(['fileImage', 'movieName']);
+        $this->progress = 0;
+        $this->uploadButton = false;
+        $this->successMessageAlert = true;
         $this->dispatch('movieUploaded', ['message' => 'Movie uploaded successfully!']);
     }
 
@@ -55,8 +59,6 @@ class Upload extends Component
         $this->uploadButton = false;
         $this->videoPath = null;
     }
-
-    
 
     public function render()
     {

@@ -15,16 +15,13 @@ class MovieUploadController extends Controller
         $fileName = $request->input('resumableFilename');
         $tempDir = storage_path('app/public/chunks');
 
-        // Ensure temporary directory exists
         if (!file_exists($tempDir)) {
             mkdir($tempDir, 0755, true);
         }
 
-        // Save the uploaded chunk
         $tempChunkPath = "{$tempDir}/{$fileName}.part{$chunkIndex}";
         $file->move($tempDir, "{$fileName}.part{$chunkIndex}");
 
-        // Check if all chunks have been uploaded
         if ($this->areAllChunksUploaded($fileName, $totalChunks, $tempDir)) {
             $finalPath = $this->assembleChunks($fileName, $totalChunks, $tempDir, $file);
             return response()->json([
@@ -55,15 +52,13 @@ class MovieUploadController extends Controller
         $finalFilePath = 'videos/' . $uniqueFileName;
         $disk = Storage::disk('public');
 
-        // Open final file stream for appending chunks
         $fileHandle = fopen($disk->path($finalFilePath), 'ab');
         for ($i = 1; $i <= $totalChunks; $i++) {
             $chunkPath = "{$tempDir}/{$fileName}.part{$i}";
 
             if (file_exists($chunkPath)) {
-                // Append chunk to final file
                 fwrite($fileHandle, file_get_contents($chunkPath));
-                unlink($chunkPath); // Delete chunk after appending
+                unlink($chunkPath); 
             }
         }
         fclose($fileHandle);
