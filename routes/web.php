@@ -16,8 +16,6 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::post('upload/upload-chunk', [MovieUploadController::class, 'uploadLargeFiles'])->name('files.upload.large');
+    Route::post('upload', [MovieUploadController::class, 'uploadMovie'])->name('upload.movie');
 });
-
-Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
-
-Route::post('upload/upload-chunk', [MovieUploadController::class, 'uploadLargeFiles'])->name('files.upload.large');
