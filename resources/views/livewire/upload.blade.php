@@ -133,11 +133,12 @@
                 Cancel
         </button>
 
-        <div class="text-md text-white pt-2 px-4 py-2" x-init="setTimeout(() => successMessageAlert = false, 2000)" x-show="successMessageAlert" x-transition:enter="transition ease-out duration-300">
-            <span >
-                Uploaded..
-            </span>
+        <div 
+            class="text-xl text-white pt-2 px-4 py-2" 
+            x-data x-show="successMessageAlert" x-transition:enter="transition ease-out duration-300" x-effect="if (successMessageAlert) {setTimeout(() => successMessageAlert = false, 5000);}">
+            <span>Uploaded..</span>
         </div>
+
 
     </div>
 </div>

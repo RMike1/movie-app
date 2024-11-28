@@ -66,21 +66,4 @@ class MovieUploadController extends Controller
         return $finalFilePath;
     }
 
-    public function uploadMovie(Request $request)
-    {
-        // $movieName = $request->movieName;
-        // $videoPath = $request->fileImage; 
-        $validated=$request->validate([
-            'fileImage' => 'required|file|mimes:mp4,mov,avi,mpg,mpeg,mkv,avi',
-            'movieName' => 'required|max:255',
-        ]);
-
-        $filePath = $request->fileImage->store('movies', 'public');
-        Movie::create([
-            'movieName' => $validated['movieName'],
-            'path' => $filePath,
-            'status' => 'completed',
-        ]);
-        return redirect()->route('dashboard')->with('success', 'Movie uploaded successfully!');
-    }
 }

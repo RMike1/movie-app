@@ -22,6 +22,7 @@ class MovieList extends Component
     public function render()
     {
         $movies=$this->movies = Movie::latest('id')->get();
+        // dd($movies);
         return view('livewire.movie-list',compact('movies'));
     }
 }
