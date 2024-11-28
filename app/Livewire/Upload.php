@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Movie;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -31,6 +32,7 @@ class Upload extends Component
             Movie::create([
                 'movieName' => $this->movieName,
                 'path' => $filePath,
+                'slug'=>Str::slug($this->movieName)
             ]);
         }
         $this->reset(['fileImage', 'movieName']);

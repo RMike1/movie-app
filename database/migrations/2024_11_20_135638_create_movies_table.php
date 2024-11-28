@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('movieName'); 
             $table->string('path');
+            $table->string('slug');
             $table->timestamps();
         });
         

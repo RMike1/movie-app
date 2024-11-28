@@ -16,4 +16,9 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
     Route::post('upload/upload-chunk', [MovieUploadController::class, 'uploadLargeFiles'])->name('files.upload.large');
+
+    Route::get('movie/{slug}', [MovieUploadController::class, 'show'])->name('movie.show');
+    Route::get('movies/{filename}', [MovieUploadController::class, 'streamVideo'])->name('video.stream');
+
+
 });

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Movie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MovieUploadController extends Controller
 {
@@ -64,6 +66,41 @@ class MovieUploadController extends Controller
         fclose($fileHandle);
 
         return $finalFilePath;
+    }
+
+    public function streamVideo($filename)
+    {
+        $path = storage_path('app/public/movies/' . $filename);
+        // dd($path);
+
+        if (!file_exists($path)) {
+            abort(404);
+        }
+        $fileSize = filesize($path);
+        $mimeType = mime_content_type($path);
+        $response = new StreamedResponse(function () use ($path) {
+            $handle = fopen($path, 'rb');
+            while (!feof($handle)) {
+                echo fread($handle, 1024 * 8); 
+                ob_flush();
+                flush();
+            }
+            fclose($handle);
+        });
+        $response->headers->set('Content-Type', $mimeType);
+        $response->headers->set('Content-Length', $fileSize);
+        $response->headers->set('Accept-Ranges', 'bytes');
+        $response->headers->set('Cache-Control', 'no-cache');
+
+        return $response;
+    }
+
+
+    public function show($slug)
+    {
+        $movie = Movie::where('slug',$slug)->first();
+        // dd($movie);
+        return view('movies.show', compact('movie'));
     }
 
 }
