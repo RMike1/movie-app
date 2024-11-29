@@ -12,8 +12,11 @@ class MovieList extends Component
     public $movies;
     
     public function deleteMovie(Movie $movie){
-        if (Storage::exists($movie->path)) {
-            Storage::delete($movie->path);
+        $isfileExists=Storage::url($movie->path);
+        if ($isfileExists) {
+            // dd('yes');
+            Storage::delete($isfileExists);
+            // Storage::delete($isfileExists);
         }
         $movie->delete();
     }
@@ -22,8 +25,7 @@ class MovieList extends Component
     public function render()
     {
         $movies=$this->movies = Movie::latest('id')->get();
-        // dd($movies);
+        // dd($movies); 
         return view('livewire.movie-list',compact('movies'));
     }
 }
-

@@ -6,17 +6,15 @@
         <div class="p-4 bg-gray-800 rounded-lg shadow-2xl" wire:key="{{$movie->id}}">
             <h3 class="text-lg text-slate-200 font-semibold">{{ $movie->movieName }}</h3>
             <a href="{{ route('movie.show', $movie->slug) }}">
-                <video controls class="w-full mt-2 rounded-md shadow-md">
+                <video class="w-full mt-2 rounded-md shadow-md">
                     <source src="{{ route('video.stream', ['filename' => basename($movie->path)]) }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </a>
-            <button type="submit" wire:click="deleteMovie({{$movie->id}})" class="mt-3 text-red-500 border border-red-600/50 p-2 rounded-sm hover:text-red-700">Delete</button>
+            <button type="submit" wire:confirm="sure to delete this movie?" wire:click="deleteMovie({{$movie->id}})" class="mt-3 text-red-500 border border-red-600/50 p-2 rounded-sm hover:text-red-700">Delete</button>
         </div>
     @empty
         <p class="text-gray-500">No movies available.</p>
     @endforelse
 </div>
-
-
 </div>

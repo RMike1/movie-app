@@ -16,7 +16,8 @@ class Upload extends Component
 
     #[Rule('required|max:255')]
     public $movieName;
-    public $fileImage=[]; 
+    public $fileImage; 
+    public $fileImageData=''; 
     public $videoPath;
     public $isUploading = false;
     public $isPaused = false;
@@ -24,17 +25,16 @@ class Upload extends Component
     public $progress = 0;
     public $successMessageAlert=false;
 
+
     public function uploadMovieFile()
     {
-
-        foreach($this->fileImage as $imageData){
-            $filePath = $imageData->store('movies', 'public');
+            // dd($this->fileImageData);
             Movie::create([
                 'movieName' => $this->movieName,
-                'path' => $filePath,
+                'path' =>$this->fileImageData,
                 'slug'=>Str::slug($this->movieName)
             ]);
-        }
+
         $this->reset(['fileImage', 'movieName']);
         $this->progress = 0;
         $this->uploadButton = false;

@@ -39,6 +39,7 @@
                     self.videoPath = data.path;
                     self.isUploading = false;
                     self.uploadButton = true;
+                    @this.set('fileImageData', data.relativePath);
                 });
 
                 this.resumable.on('fileError', function() {
@@ -76,18 +77,23 @@
                     class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
                     Browse Movie
                 </button>
-                <input type="file" wire:model="fileImage" class="hidden" x-ref="fileInput" />
-                {{-- <input type="text" wire:model="fileImage"  x-on:live="$wire.fileData"/> --}}
+                <input type="file"  class="hidden"  x-ref="fileInput" />
+                <input type="text" class="hidden" wire:model="fileImageData" x-bind:value="videoPath"/> 
+                
 
-                @error('fileImage')
+
+                @error('fileImageData')
                     <p class="text-red-500">{{ $message }}</p>
                 @enderror
             
         </div>
 
-        <div x-show="isUploading" class="w-full bg-gray-200 rounded-lg h-6">
-            <div class="bg-gray-500 h-full rounded-lg text-xs text-white text-center" :style="{ width: `${progress}%` }"
+        <div x-show="isUploading" x-cloak class="w-full bg-gray-200 rounded-lg h-6">
+            <div class="bg-gray-500 h-full rounded-lg text-xs text-white text-center" x-cloak :style="{ width: `${progress}%` }"
                 x-text="`${progress}%`">
+            </div>
+            <div class="text-md text-white mt-2">
+                Uploading..
             </div>
         </div>
 
@@ -95,18 +101,21 @@
             <button 
                 x-show="isUploading && !isPaused"
                 @click="pauseUpload"
-                class="text-white px-4 py-2 rounded-lg outline outline-offset-2 outline-red-300/50 hover:bg-red-300/50">
+                x-cloak
+                class="text-white px-4 py-2 mt-2 rounded-lg outline outline-offset-2 outline-red-300/50 hover:bg-red-300/50">
                 Pause
             </button>
 
             <button 
                 x-show="isUploading && isPaused"
+                x-cloak
                 @click="resumeUpload"
-                class="text-white px-4 py-2 rounded-lg outline outline-offset-2 outline-green-600/50 hover:bg-green-600/50">
+                class="text-white px-4 py-2 mt-2 rounded-lg outline outline-offset-2 outline-green-600/50 hover:bg-green-600/50">
                 Resume
             </button>
             <button 
                 x-show="isUploading"
+                x-cloak
                 x-on:click="cancelUpload()"
                 class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
                 Cancel
@@ -119,15 +128,17 @@
 
         <button 
             x-show="uploadButton"
+            x-cloak
             wire:click="uploadMovieFile"
             type="submit"
             class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
-            <span wire:loading.remove wire:target='uploadMovieFile'>Click to Upload</span>
-            <span wire:loading wire:target="uploadMovieFile">Uploading...</span>
+            <span wire:loading.remove wire:target='uploadMovieFile'>Click to Save</span>
+            <span wire:loading wire:target="uploadMovieFile">Saving...</span>
         </button>
             
         <button 
                 x-show="uploadButton"
+                x-cloak
                 x-on:click="cancelUpload()"
                 class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
                 Cancel
@@ -135,8 +146,8 @@
 
         <div 
             class="text-xl text-white pt-2 px-4 py-2" 
-            x-data x-show="successMessageAlert" x-transition:enter="transition ease-out duration-300" x-effect="if (successMessageAlert) {setTimeout(() => successMessageAlert = false, 5000);}">
-            <span>Uploaded..</span>
+            x-data x-cloak x-show="successMessageAlert" x-transition:enter="transition ease-out duration-300" x-effect="if (successMessageAlert) {setTimeout(() => successMessageAlert = false, 5000);}">
+            <span>Saved..</span>
         </div>
 
 

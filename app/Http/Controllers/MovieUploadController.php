@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Movie;
 use Illuminate\Http\Request;
+use App\Events\FileUploaded;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -26,12 +27,15 @@ class MovieUploadController extends Controller
 
         if ($this->areAllChunksUploaded($fileName, $totalChunks, $tempDir)) {
             $finalPath = $this->assembleChunks($fileName, $totalChunks, $tempDir, $file);
+            // event(new FileUploaded(asset('storage/' . $finalPath)));
+
             return response()->json([
                 'path' => asset('storage/' . $finalPath),
                 'filename' => $fileName,
+                'relativePath'=>$finalPath,
             ]);
         }
-
+        
         return response()->json(['status' => 'chunk uploaded']);
     }
 
@@ -51,7 +55,7 @@ class MovieUploadController extends Controller
         $fileNameWithoutExtension = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $uniqueFileName = $fileNameWithoutExtension . '_' . md5(time()) . '.' . $extension;
 
-        $finalFilePath = 'videos/' . $uniqueFileName;
+        $finalFilePath = 'movies/' . $uniqueFileName;
         $disk = Storage::disk('public');
 
         $fileHandle = fopen($disk->path($finalFilePath), 'ab');
