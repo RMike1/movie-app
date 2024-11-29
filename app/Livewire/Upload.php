@@ -14,7 +14,7 @@ class Upload extends Component
 {
     use WithFileUploads;
 
-    #[Rule('required|max:255')]
+    // #[Rule('required|max:255')]
     public $movieName;
     public $fileImage; 
     public $fileImageData=''; 
@@ -28,12 +28,23 @@ class Upload extends Component
 
     public function uploadMovieFile()
     {
-            // dd($this->fileImageData);
-            Movie::create([
-                'movieName' => $this->movieName,
-                'path' =>$this->fileImageData,
-                'slug'=>Str::slug($this->movieName)
-            ]);
+
+        $validatedData = $this->validate([
+            'movieName' => 'required|max:255|unique:movies',
+            'fileImageData' => 'required|string',
+        ]);
+
+        // dd($this->fileImageData);
+        Movie::create([
+            'movieName' => $validatedData['movieName'],
+            'path' => $validatedData['fileImageData'],
+            'slug' => Str::slug($validatedData['movieName']),
+        ]);
+            // Movie::create([
+            //     'movieName' => $this->movieName,
+            //     'path' =>$this->fileImageData,
+            //     'slug'=>Str::slug($this->movieName)
+            // ]);
 
         $this->reset(['fileImage', 'movieName']);
         $this->progress = 0;

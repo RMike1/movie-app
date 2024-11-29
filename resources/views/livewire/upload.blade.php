@@ -69,24 +69,19 @@
         <div class="text-center flex">
                 <input type="text" placeholder="Movie name..." id="movieName" wire:model="movieName"
                     class="p-3 flex-grow bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500" />
-                @error('movieName')
-                    <p class="text-red-500">{{ $message }}</p>
-                @enderror
-
                 <button @click="$refs.fileInput.click()"
                     class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
                     Browse Movie
                 </button>
                 <input type="file"  class="hidden"  x-ref="fileInput" />
                 <input type="text" class="hidden" wire:model="fileImageData" x-bind:value="videoPath"/> 
-                
-
-
-                @error('fileImageData')
-                    <p class="text-red-500">{{ $message }}</p>
-                @enderror
-            
         </div>
+        @error('fileImageData')
+            <span class="text-red-500">{{ $message }}</span>
+        @enderror
+        @error('movieName')
+                    <span class="text-red-500">{{ $message }}</span>
+        @enderror
 
         <div x-show="isUploading" x-cloak class="w-full bg-gray-200 rounded-lg h-6">
             <div class="bg-gray-500 h-full rounded-lg text-xs text-white text-center" x-cloak :style="{ width: `${progress}%` }"

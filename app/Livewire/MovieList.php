@@ -12,12 +12,14 @@ class MovieList extends Component
     public $movies;
     
     public function deleteMovie(Movie $movie){
-        $isfileExists=Storage::url($movie->path);
-        if ($isfileExists) {
-            // dd('yes');
-            Storage::delete($isfileExists);
-            // Storage::delete($isfileExists);
+
+        $filePath = $movie->path;
+        if (Storage::disk('public')->exists($filePath)) {
+            Storage::disk('public')->delete($filePath);
+        } else {
+            dd('not found');
         }
+
         $movie->delete();
     }
     
