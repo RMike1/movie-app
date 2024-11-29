@@ -40,11 +40,6 @@ class Upload extends Component
             'path' => $validatedData['fileImageData'],
             'slug' => Str::slug($validatedData['movieName']),
         ]);
-            // Movie::create([
-            //     'movieName' => $this->movieName,
-            //     'path' =>$this->fileImageData,
-            //     'slug'=>Str::slug($this->movieName)
-            // ]);
 
         $this->reset(['fileImage', 'movieName']);
         $this->progress = 0;
