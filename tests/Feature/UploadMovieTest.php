@@ -1,48 +1,32 @@
 <?php
 
+use App\Models\User;
 use App\Models\Movie;
 use Livewire\Livewire;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
 use App\Livewire\Upload;
-use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
-it('uploads a movie in chunks', function () {
-    Storage::fake('public');
-    $chunkSize = 5 * 1024 * 1024; // 5 MB
-    $totalChunks = 3;
-    $fileName = 'sample_movie.mp4';
-    $fileContent = str_repeat('A', $chunkSize * $totalChunks);
-    $tempFile = tmpfile();
+it('upload movie file in chunks', function () {
+    Storage::fake('public'); 
 
-    fwrite($tempFile, $fileContent);
-    $tempFilePath = stream_get_meta_data($tempFile)['uri'];
-    $uploadedFile = new UploadedFile($tempFilePath, $fileName, null, null, true);
+    Storage::disk('public')->makeDirectory('chunks');
+    Storage::disk('public')->makeDirectory('movies');
 
-    for ($chunkNumber = 1; $chunkNumber <= $totalChunks; $chunkNumber++) {
-        $start = ($chunkNumber - 1) * $chunkSize;
-        $chunkContent = substr($fileContent, $start, $chunkSize);
-        $chunkFile = tmpfile();
-        fwrite($chunkFile, $chunkContent);
-        $chunkPath = stream_get_meta_data($chunkFile)['uri'];
-        $chunkUploadedFile = new UploadedFile($chunkPath, $fileName, null, null, true);
-
+    $file = UploadedFile::fake()->create('movie.mp4', 500); 
+    $totalChunks = 3; 
+    $fileName = 'movie.mp4'; 
+    for ($i = 1; $i <= $totalChunks; $i++) {
         $response = $this->postJson(route('files.upload.large'), [
-            'file' => $chunkUploadedFile,
-            'resumableChunkNumber' => $chunkNumber,
+            'file' => $file,
+            'resumableChunkNumber' => $i,
             'resumableTotalChunks' => $totalChunks,
             'resumableFilename' => $fileName,
         ]);
-
-        dd($response->json());
-        $response->assertJsonStructure([
-            'path',
-            'filename',
-            'relativePath',
-        ]);
+        $response->assertStatus(200);
     }
-    $assembledFilePath = Storage::disk('public')->path('movies');
-    $assembledFile = glob($assembledFilePath . '/*' . $fileName);
-    expect(count($assembledFile))->toBe(1);
-    fclose($tempFile);
+    $response->assertJsonStructure(['path', 'filename', 'relativePath']);
+    $finalFilePath = 'movies/movie.mp4';
+    Storage::disk('public')->assertExists($finalFilePath);
 });
