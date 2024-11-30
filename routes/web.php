@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MovieStreamController;
 use App\Http\Controllers\MovieUploadController;
 
 Route::get('/', function () {
@@ -15,10 +16,10 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    Route::post('upload/upload-chunk', [MovieUploadController::class, 'uploadLargeFiles'])->name('files.upload.large');
-
+    
     Route::get('movie/{slug}', [MovieUploadController::class, 'show'])->name('movie.show');
-    Route::get('movies/{filename}', [MovieUploadController::class, 'streamVideo'])->name('video.stream');
-
-
+    Route::get('movies/{filename}',MovieStreamController::class)->name('video.stream');
+    
+    
 });
+Route::post('upload/upload-chunk', [MovieUploadController::class, 'uploadLargeFiles'])->name('files.upload.large');

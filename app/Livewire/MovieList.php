@@ -17,7 +17,7 @@ class MovieList extends Component
         if (Storage::disk('public')->exists($filePath)) {
             Storage::disk('public')->delete($filePath);
         } else {
-            dd('not found');
+            // dd('not found');
         }
 
         $movie->delete();

@@ -8,15 +8,12 @@ use Livewire\Attributes\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-
-
 class Upload extends Component
 {
     use WithFileUploads;
 
     // #[Rule('required|max:255')]
     public $movieName;
-    public $fileImage; 
     public $fileImageData=''; 
     public $videoPath;
     public $isUploading = false;
@@ -28,20 +25,18 @@ class Upload extends Component
 
     public function uploadMovieFile()
     {
-
         $validatedData = $this->validate([
             'movieName' => 'required|max:255|unique:movies',
-            'fileImageData' => 'required|string',
         ]);
 
         // dd($this->fileImageData);
         Movie::create([
             'movieName' => $validatedData['movieName'],
-            'path' => $validatedData['fileImageData'],
+            'path' => $this->fileImageData,
             'slug' => Str::slug($validatedData['movieName']),
         ]);
 
-        $this->reset(['fileImage', 'movieName']);
+        $this->reset(['fileImageData', 'movieName']);
         $this->progress = 0;
         $this->uploadButton = false;
         $this->successMessageAlert = true;
