@@ -5,7 +5,7 @@
     @forelse ($movies as $movie)
         <div class="p-4 bg-gray-800 rounded-lg shadow-2xl" wire:key="{{$movie->id}}">
             <h3 class="text-lg text-slate-200 font-semibold">{{ $movie->movieName }}</h3>
-            <a href="{{ route('movie.show', $movie->slug) }}">
+            <a wire:navigate href="{{ route('movie.show', $movie->slug) }}">
                 <video class="w-full mt-2 rounded-md shadow-md">
                     <source src="{{ route('video.stream', ['filename' => basename($movie->path)]) }}" type="video/mp4">
                     Your browser does not support the video tag.

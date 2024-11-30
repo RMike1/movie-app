@@ -3,7 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             <h1 class="text-4xl text-white font-bold text-center mb-10">{{ $movie->movieName }}</h1>
         </h2>
-            <a href="{{ route('dashboard') }}" class="text-white px-4 py-2 rounded-lg outline outline-offset-2 outline-gray-600/50 hover:bg-gray-600/50 mt-4">Back</a>
+            <a wire:navigate href="{{ route('dashboard') }}" class="text-white px-4 py-2 rounded-lg outline outline-offset-2 outline-gray-600/50 hover:bg-gray-600/50 mt-4">Back</a>
     </x-slot>
 
     <div class="py-12">

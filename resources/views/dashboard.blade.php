@@ -10,7 +10,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="container mx-auto px-4">
                     <livewire:upload />
-                    <livewire:movie-list />
+                    <livewire:movie-list lazy/>
                 </div>
             </div>
         </div>
